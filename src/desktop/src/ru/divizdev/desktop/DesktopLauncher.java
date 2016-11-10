@@ -7,9 +7,9 @@ import ru.divizdev.CBGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Zombie Bird";
-		config.width = 480;
-		config.height = 320;
+		config.title = "Clone Bird";
+		config.width = 272;
+		config.height = 480;
 		new LwjglApplication(new CBGame(), config);
 	}
 }
