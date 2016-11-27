@@ -1,81 +1,88 @@
 package ru.divizdev.gameworld;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import ru.divizdev.Helpers.AssetLoader;
+import ru.divizdev.gameobject.Bird;
 
 /**
  * Created by znobischevdv on 11.11.2016.
  */
 public class GameRenderer {
+    private GameWorld myWorld;
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
 
-    private GameWorld myWorld;
-    public GameRenderer(GameWorld world) {
+    private SpriteBatch batcher;
+
+    private int midPointY;
+    private int gameHeight;
+
+    public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
         myWorld = world;
+
+        // слово this ссылается на экземляр текущего класса
+        // мы задаем значения параметрам класса
+        // полченные из GameScreen.
+        this.gameHeight = gameHeight;
+        this.midPointY = midPointY;
+
         cam = new OrthographicCamera();
-        cam.setToOrtho(true, 136, 240);
+        cam.setToOrtho(true, 136, gameHeight);
+
+        batcher = new SpriteBatch();
+        batcher.setProjectionMatrix(cam.combined);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
     }
 
-    public void render() {
+    public void render(float runTime) {
 
+        // мы уберем это из цикла далее, для улучшения производительности
+        Bird bird = myWorld.getBird();
 
+        // Заполним задний фон одним цветом
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-          /*
-         * 1. Мы рисуем черный задний фон, чтобы избавится от моргания и следов от передвигающихся объектов
-         */
-
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        /*
-         * 2. Мы отрисовываем однотонный квадрат
-         */
-
-        // Говорим shapeRenderer начинать отрисовывать формы
+        // Стартуем ShapeRenderer
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        // Выбираем RGB Color 87, 109, 120, не прозрачный
-        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
+        // Отрисуем Background цвет
+        shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
+        shapeRenderer.rect(0, 0, 136, midPointY + 66);
 
-        // Отрисовываем квадрат из myWorld (Используем ShapeType.Filled)
-//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-//                myWorld.getRect().width, myWorld.getRect().height);
+        // Отрисуем Grass
+        shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
+        shapeRenderer.rect(0, midPointY + 66, 136, 11);
 
-        // говорим shapeRenderer прекратить отрисовку
-        // Мы ДОЛЖНЫ каждый раз это делать
+        // Отрисуем Dirt
+        shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
+        shapeRenderer.rect(0, midPointY + 77, 136, 52);
+
+        // Заканчиваем ShapeRenderer
         shapeRenderer.end();
 
-        /*
-         * 3. Мы отрисовываем рамку для квадрата
-         */
+        // Стартуем SpriteBatch
+        batcher.begin();
+        // Отменим прозрачность
+        // Это хорошо для производительности, когда отрисовываем картинки без прозрачности
+        batcher.disableBlending();
+        batcher.draw(AssetLoader.bg, 0, midPointY + 23, 136, 43);
 
-        // Говорим shapeRenderer нарисовать рамку следующей формы
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        // Птичке нужна прозрачность, поэтому включаем ее
+        batcher.enableBlending();
 
-        // Выбираем цвет RGB Color 255, 109, 120, не прозрачный
-        shapeRenderer.setColor(255 / 255.0f, 0.42745098f, 120 / 255.0f, 1);
+        // Отрисуем птичку на ее координатах. Получим Animation объект из AssetLoader
+        // Передадим runTime переменную чтобы получить текущий кадр.
+        batcher.draw(AssetLoader.birdAnimation.getKeyFrame(runTime),
+                bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
 
-        // Отрисовываем квадрат из myWorld (Using ShapeType.Line)
-//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-//                myWorld.getRect().width, myWorld.getRect().height);
-        shapeRenderer.end();
+        // Заканчиваем SpriteBatch
+        batcher.end();
 
-        SpriteBatch spriteBatch;
-        BitmapFont font;
-        CharSequence str = String.valueOf(myWorld.getFPS());
-        spriteBatch = new SpriteBatch();
-        font = new BitmapFont();
-
-        spriteBatch.begin();
-        font.draw(spriteBatch, str, 100, 100);
-        spriteBatch.end();
     }
 }
