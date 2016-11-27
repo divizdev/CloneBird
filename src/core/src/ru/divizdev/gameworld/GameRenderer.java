@@ -2,6 +2,8 @@ package ru.divizdev.gameworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.*;
 
 /**
@@ -59,12 +61,21 @@ public class GameRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
         // Выбираем цвет RGB Color 255, 109, 120, не прозрачный
-        shapeRenderer.setColor(255 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
+        shapeRenderer.setColor(255 / 255.0f, 0.42745098f, 120 / 255.0f, 1);
 
         // Отрисовываем квадрат из myWorld (Using ShapeType.Line)
         shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
                 myWorld.getRect().width, myWorld.getRect().height);
         shapeRenderer.end();
 
+        SpriteBatch spriteBatch;
+        BitmapFont font;
+        CharSequence str = String.valueOf(myWorld.getFPS());
+        spriteBatch = new SpriteBatch();
+        font = new BitmapFont();
+
+        spriteBatch.begin();
+        font.draw(spriteBatch, str, 100, 100);
+        spriteBatch.end();
     }
 }

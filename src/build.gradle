@@ -7,14 +7,16 @@ buildscript {
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'com.android.tools.build:gradle:2.2.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.2.0'
+
     }
 }
 
 allprojects {
-    apply plugin: "eclipse"
+
     apply plugin: "idea"
+    apply plugin: "eclipse"
 
     version = '1.0'
     ext {
@@ -32,12 +34,15 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
+
+
 }
 
 project(":desktop") {
     apply plugin: "java"
 
 
+    
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -105,6 +110,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        testCompile "junit:junit:4.12"
     }
 }
 

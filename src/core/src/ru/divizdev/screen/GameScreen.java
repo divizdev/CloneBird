@@ -56,12 +56,12 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
         Gdx.app.log("GameScreen", "Hide");
-
     }
 
     @Override
     public void dispose() {
 //        Gdx.app.log("GameScreen", "Dispose");
+
 
     }
 }
