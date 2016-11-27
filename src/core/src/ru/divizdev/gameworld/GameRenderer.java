@@ -46,8 +46,8 @@ public class GameRenderer {
         shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
 
         // Отрисовываем квадрат из myWorld (Используем ShapeType.Filled)
-        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-                myWorld.getRect().width, myWorld.getRect().height);
+//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
+//                myWorld.getRect().width, myWorld.getRect().height);
 
         // говорим shapeRenderer прекратить отрисовку
         // Мы ДОЛЖНЫ каждый раз это делать
@@ -64,8 +64,8 @@ public class GameRenderer {
         shapeRenderer.setColor(255 / 255.0f, 0.42745098f, 120 / 255.0f, 1);
 
         // Отрисовываем квадрат из myWorld (Using ShapeType.Line)
-        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-                myWorld.getRect().width, myWorld.getRect().height);
+//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
+//                myWorld.getRect().width, myWorld.getRect().height);
         shapeRenderer.end();
 
         SpriteBatch spriteBatch;

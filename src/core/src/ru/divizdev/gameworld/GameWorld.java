@@ -1,31 +1,38 @@
 package ru.divizdev.gameworld;
 
-import com.badlogic.gdx.math.Rectangle;
+import ru.divizdev.gameobject.Bird;
 
 /**
  * Created by znobischevdv on 11.11.2016.
  */
 public class GameWorld {
 
-    private Rectangle rect = new Rectangle(0, 10, 17, 12);
+    /**
+     * Getter for property 'bird'.
+     *
+     * @return Value for property 'bird'.
+     */
+    public Bird getBird() {
+        return bird;
+    }
+
+    private Bird bird;
     protected Integer fps = 0;
 
 
 
     public void update(float delta) {
-//        Gdx.app.log("GameScreen FPS", (1/delta) + "");
         fps = (int)(1 / delta);
-        rect.x++;
-        if (rect.x > 137) {
-            rect.x = 0;
-        }
+        bird.update(delta);
     }
 
-    public Rectangle getRect(){
-        return rect;
-    }
+
 
     public Integer getFPS(){
         return fps;
+    }
+
+    public GameWorld(int midPoint) {
+        bird = new Bird(33, midPoint - 5, 17, 12 );
     }
 }

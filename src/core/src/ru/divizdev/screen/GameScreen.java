@@ -3,6 +3,7 @@ package ru.divizdev.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import ru.divizdev.Helpers.InputHandler;
 import ru.divizdev.gameworld.GameRenderer;
 import ru.divizdev.gameworld.GameWorld;
 
@@ -15,8 +16,19 @@ public class GameScreen implements Screen {
     private GameRenderer renderer;
 
     public GameScreen(){
-        world = new GameWorld(); // initialize world
+
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float gameWidth = 136;
+        float gameHeight = screenHeight / (screenWidth / gameWidth);
+
+        int midPointY = (int) gameHeight / 2;
+
+
+        world = new GameWorld(midPointY); // initialize world
         renderer = new GameRenderer(world); // initialize renderer
+
+        Gdx.input.setInputProcessor(new InputHandler(world.getBird()));
     }
 
     @Override
