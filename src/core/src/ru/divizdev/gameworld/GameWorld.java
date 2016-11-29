@@ -1,12 +1,19 @@
 package ru.divizdev.gameworld;
 
 import ru.divizdev.gameobject.Bird;
+import ru.divizdev.gameobject.ScrollHandler;
 
 /**
  * Created by znobischevdv on 11.11.2016.
  */
 public class GameWorld {
 
+    public ScrollHandler getScroller() {
+        return scroller;
+    }
+
+    private ScrollHandler scroller;
+    private Bird bird;
     /**
      * Getter for property 'bird'.
      *
@@ -16,7 +23,7 @@ public class GameWorld {
         return bird;
     }
 
-    private Bird bird;
+
     protected Integer fps = 0;
 
 
@@ -24,6 +31,7 @@ public class GameWorld {
     public void update(float delta) {
         fps = (int)(1 / delta);
         bird.update(delta);
+        scroller.update(delta);
     }
 
 
@@ -34,5 +42,6 @@ public class GameWorld {
 
     public GameWorld(int midPoint) {
         bird = new Bird(33, midPoint - 5, 17, 12 );
+        scroller = new ScrollHandler(midPoint + 66);
     }
 }
