@@ -2,16 +2,19 @@ package ru.divizdev.Helpers;
 
 import com.badlogic.gdx.InputProcessor;
 import ru.divizdev.gameobject.Bird;
+import ru.divizdev.gameworld.GameWorld;
 
 /**
  * Created by znobischevdv on 27.11.2016.
  */
 public class InputHandler implements InputProcessor {
 
+    private final GameWorld myWorld;
     private Bird bird;
 
-    public InputHandler(Bird bird) {
-        this.bird = bird;
+    public InputHandler(GameWorld myWorld) {
+        this.myWorld = myWorld;
+        this.bird = myWorld.getBird();
     }
 
     @Override
@@ -31,7 +34,17 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (myWorld.isReady()) {
+            myWorld.start();
+        }
+
         bird.onClick();
+
+        if (myWorld.isGameOver()) {
+            // Обнулим все перменные, перейдем в GameState.READ
+            myWorld.restart();
+        }
+
         return true;
     }
 

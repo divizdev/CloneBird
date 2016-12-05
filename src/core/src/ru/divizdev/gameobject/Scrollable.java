@@ -63,4 +63,10 @@ public class Scrollable {
     }
 
 
+    public void stop() {
+        velocity.x = 0;
+    }
+
+    public void onRestart(float x, int scrollSpeed) {
+    }
 }

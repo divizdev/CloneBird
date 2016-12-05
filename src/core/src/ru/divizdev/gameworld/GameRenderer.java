@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import ru.divizdev.Helpers.AssetLoader;
-import ru.divizdev.gameobject.*;
+import ru.divizdev.gameobject.Bird;
+import ru.divizdev.gameobject.Grass;
+import ru.divizdev.gameobject.Pipe;
+import ru.divizdev.gameobject.ScrollHandler;
 
 /**
  * Created by znobischevdv on 11.11.2016.
@@ -75,42 +78,38 @@ public class GameRenderer {
 
     public void render(float runTime) {
 
-        // Заполним задний фон одним цветом
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Стартуем ShapeRenderer
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        // Отрисуем Background цвет
+        // отрисовка заднего фона
         shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
         shapeRenderer.rect(0, 0, 136, midPointY + 66);
 
-        // Отрисуем Grass
+        // отрисовка Grass
         shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
         shapeRenderer.rect(0, midPointY + 66, 136, 11);
 
-        // Отрисуем Dirt
+        // отрисовка Dirt
         shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
         shapeRenderer.rect(0, midPointY + 77, 136, 52);
 
-        // Заканчиваем ShapeRenderer
         shapeRenderer.end();
 
-        // Стартуем SpriteBatch
         batcher.begin();
-        // Отменим прозрачность
-        // Это хорошо для производительности, когда отрисовываем картинки без прозрачности
         batcher.disableBlending();
         batcher.draw(bg, 0, midPointY + 23, 136, 43);
 
-
-
+        // 1. Отрисуем Grass
         drawGrass();
+
+        // 2. Отрисуем Pipes
         drawPipes();
         batcher.enableBlending();
-        drawSkulls();
 
+        // 3. Отрисуем Skulls (требуется включить прозрачность)
+        drawSkulls();
 
         if (bird.shouldntFlap()) {
             batcher.draw(birdMid, bird.getX(), bird.getY(),
@@ -124,9 +123,34 @@ public class GameRenderer {
                     1, 1, bird.getRotation());
         }
 
+        if (myWorld.isReady()) {
+            // Отрисуем сначала тень
+            AssetLoader.shadow.draw(batcher, "Touch me", (136 / 2)
+                    - (42), 76);
+            // Отрисуем сам текст
+            AssetLoader.font.draw(batcher, "Touch me", (136 / 2)
+                    - (42 - 1), 75);
+        } else {
 
-        // Заканчиваем SpriteBatch
+            if (myWorld.isGameOver()) {
+                AssetLoader.shadow.draw(batcher, "Game Over", 25, 56);
+                AssetLoader.font.draw(batcher, "Game Over", 24, 55);
+
+                AssetLoader.shadow.draw(batcher, "Try again?", 23, 76);
+                AssetLoader.font.draw(batcher, "Try again?", 24, 75);
+            }
+
+            String score = myWorld.getScore() + "";
+
+            AssetLoader.shadow.draw(batcher, "" + myWorld.getScore(), (136 / 2)
+                    - (3 * score.length()), 12);
+            AssetLoader.font.draw(batcher, "" + myWorld.getScore(), (136 / 2)
+                    - (3 * score.length() - 1), 11);
+        }
+
         batcher.end();
+
+
 
     }
 
