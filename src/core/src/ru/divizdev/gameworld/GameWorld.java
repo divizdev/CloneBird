@@ -15,8 +15,24 @@ public class GameWorld {
         return currentState == GameState.GAMEOVER;
     }
 
+    public int getMidPoint() {
+        return midPoint;
+    }
+
+    public boolean isMenu() {
+        return currentState == GameState.MENU;
+    }
+
+    public void ready() {
+        currentState = GameState.READY;
+    }
+
+    public boolean isRunning() {
+        return currentState == GameState.RUNNING;
+    }
+
     public enum GameState {
-        READY, RUNNING, GAMEOVER
+        MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
     }
 
     protected Integer fps = 0;
@@ -101,7 +117,16 @@ public class GameWorld {
             bird.die();
             bird.decelerate();
             currentState = GameState.GAMEOVER;
+
+            if (score > AssetLoader.getHighScore()) {
+                AssetLoader.setHighScore(score);
+                currentState = GameState.HIGHSCORE;
+            }
         }
+    }
+
+    public boolean isHighScore() {
+        return currentState == GameState.HIGHSCORE;
     }
 
     public Integer getFPS() {
